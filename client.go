@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strings"
 )
@@ -52,7 +51,7 @@ func NewClient(dmn, usrname, passwd string, httpClient *http.Client) *Client {
 	return c
 }
 
-// NewRequest creates a new request
+// NewRequest function creates a new request
 func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Request, error) {
 
 	url := ""
@@ -63,14 +62,12 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 		url = fmt.Sprintf("https://%s%s%s", subdomain, baseURLString, urlStr)
 	}
 
-	log.Println(url)
 	buf := new(bytes.Buffer)
 	if body != nil {
 		err := json.NewEncoder(buf).Encode(body)
 		if err != nil {
 			return nil, err
 		}
-		log.Println(buf.String())
 	}
 
 	req, err := http.NewRequest(method, url, buf)
@@ -94,7 +91,7 @@ func (c *Client) Do(req *http.Request, v interface{}) (*Response, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-
+	log.Printf("Zendesk response: %s\n", resp.StatusCode)
 	response := newResponse(resp)
 
 	err = CheckResponse(resp)
@@ -117,10 +114,6 @@ func newResponse(r *http.Response) *Response {
 	response := &Response{Response: r}
 	return response
 }
-
-/*
-{"error":"API auth required"}
-*/
 
 // ErrorResponse wraps an error response
 type ErrorResponse struct {
