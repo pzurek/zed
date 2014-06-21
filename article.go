@@ -99,15 +99,15 @@ func (s *ArticleService) Create(a *Article) error {
 	var err error
 
 	if a.SectionID == nil {
-		return fmt.Errorf("an article has to include a valid Section ID")
+		return fmt.Errorf("missing section id")
 	}
 
 	if a.Title == nil {
-		return fmt.Errorf("an article has to include a valid Title")
+		return fmt.Errorf("missing article title")
 	}
 
 	if a.Body == nil {
-		return fmt.Errorf("an article has to include a valid Body")
+		return fmt.Errorf("missing article body")
 	}
 
 	l := "en-us"
@@ -127,6 +127,73 @@ func (s *ArticleService) Create(a *Article) error {
 
 	result := new(ArticleResponse)
 	resp, err := s.client.Do(req, result)
+	if err != nil {
+		return fmt.Errorf("request failed with: %v\n", err)
+	}
+
+	log.Printf("%v %s\n", resp.StatusCode, resp.Status)
+
+	return err
+}
+
+// Update func
+func (s *ArticleService) Update(a *Article) error {
+	var err error
+
+	if a.ID == nil {
+		return fmt.Errorf("missing article id")
+	}
+
+	if a.Title == nil {
+		return fmt.Errorf("missing article title")
+	}
+
+	if a.Body == nil {
+		return fmt.Errorf("missing article body")
+	}
+
+	l := "en-us"
+
+	if a.Locale == nil {
+		a.Locale = &l
+	}
+
+	ar := &ArticleRequest{Article: a}
+
+	url := fmt.Sprintf("help_center/articles/%v.json", *a.ID)
+
+	req, err := s.client.NewRequest("PUT", url, ar)
+	if err != nil {
+		return fmt.Errorf("creating new request failed: %v\n", err)
+	}
+
+	result := new(ArticleResponse)
+	resp, err := s.client.Do(req, result)
+	if err != nil {
+		return fmt.Errorf("request failed with: %v\n", err)
+	}
+
+	log.Printf("%v %s\n", resp.StatusCode, resp.Status)
+
+	return err
+}
+
+// Delete func
+func (s *ArticleService) Delete(id *int64) error {
+	var err error
+
+	if id == nil {
+		return fmt.Errorf("missing article id")
+	}
+
+	url := fmt.Sprintf("help_center/articles/%v.json", *id)
+
+	req, err := s.client.NewRequest("DELETE", url, nil)
+	if err != nil {
+		return fmt.Errorf("creating new request failed: %v\n", err)
+	}
+
+	resp, err := s.client.Do(req, nil)
 	if err != nil {
 		return fmt.Errorf("request failed with: %v\n", err)
 	}
