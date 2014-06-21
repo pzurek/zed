@@ -94,7 +94,7 @@ func (s *ArticleService) getPage(url string) (*[]Article, *string, *Response, er
 	return &resource, next, resp, err
 }
 
-// Create func
+// Create func creates a single new article
 func (s *ArticleService) Create(a *Article) error {
 	var err error
 
@@ -136,7 +136,7 @@ func (s *ArticleService) Create(a *Article) error {
 	return err
 }
 
-// Update func
+// Update func updates a single article
 func (s *ArticleService) Update(a *Article) error {
 	var err error
 
@@ -178,7 +178,7 @@ func (s *ArticleService) Update(a *Article) error {
 	return err
 }
 
-// Delete func
+// Delete func deletes a single article
 func (s *ArticleService) Delete(id *int64) error {
 	var err error
 
