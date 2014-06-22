@@ -27,8 +27,13 @@ type Article struct {
 	UpdatedAt        *string  `json:"updated_at,omitempty"`
 }
 
-// ArticleResponse struct
-type ArticleResponse struct {
+// ArticleWrapper struct
+type ArticleWrapper struct {
+	Article *Article `json:"article"`
+}
+
+// ArticleListResponse struct
+type ArticleListResponse struct {
 	Results   []Article `json:"articles"`
 	Count     *int64    `json:"count"`
 	Next      *string   `json:"next_page"`
@@ -36,11 +41,6 @@ type ArticleResponse struct {
 	PageCount *int64    `json:"page_count"`
 	PerPage   *int64    `json:"per_page"`
 	Previous  *string   `json:"previous_page"`
-}
-
-// ArticleRequest struct
-type ArticleRequest struct {
-	Article *Article `json:"article"`
 }
 
 // ArticleService struct
@@ -80,7 +80,7 @@ func (s *ArticleService) getPage(url string) (*[]Article, *string, *Response, er
 		return nil, nil, nil, err
 	}
 
-	result := new(ArticleResponse)
+	result := new(ArticleListResponse)
 	resp, err := s.client.Do(req, result)
 	if err != nil {
 		return nil, nil, resp, err
@@ -92,19 +92,20 @@ func (s *ArticleService) getPage(url string) (*[]Article, *string, *Response, er
 }
 
 // Create func creates a single new article
-func (s *ArticleService) Create(a *Article) error {
+func (s *ArticleService) Create(a *Article) (*Article, error) {
+	var article *Article
 	var err error
 
 	if a.SectionID == nil {
-		return fmt.Errorf("missing section id")
+		return article, fmt.Errorf("missing required field: section id")
 	}
 
 	if a.Title == nil {
-		return fmt.Errorf("missing article title")
+		return article, fmt.Errorf("missing required field: article title")
 	}
 
 	if a.Body == nil {
-		return fmt.Errorf("missing article body")
+		return article, fmt.Errorf("missing required field: article body")
 	}
 
 	l := "en-us"
@@ -113,35 +114,40 @@ func (s *ArticleService) Create(a *Article) error {
 		a.Locale = &l
 	}
 
-	ar := &ArticleRequest{Article: a}
+	ar := &ArticleWrapper{Article: a}
 
 	url := fmt.Sprintf("help_center/sections/%v/articles.json", *a.SectionID)
 
 	req, err := s.client.NewRequest("POST", url, ar)
 	if err != nil {
-		return fmt.Errorf("creating new request failed: %v\n", err)
+		return article, err
 	}
 
-	result := new(ArticleResponse)
+	result := new(ArticleWrapper)
 	_, err = s.client.Do(req, result)
+	if err != nil {
+		return article, err
+	}
 
-	return err
+	article = result.Article
+	return article, err
 }
 
 // Update func updates a single article
-func (s *ArticleService) Update(a *Article) error {
+func (s *ArticleService) Update(a *Article) (*Article, error) {
+	var article *Article
 	var err error
 
 	if a.ID == nil {
-		return fmt.Errorf("missing article id")
+		return article, fmt.Errorf("missing required field: article id")
 	}
 
 	if a.Title == nil {
-		return fmt.Errorf("missing article title")
+		return article, fmt.Errorf("missing required field: article title")
 	}
 
 	if a.Body == nil {
-		return fmt.Errorf("missing article body")
+		return article, fmt.Errorf("missing required field: article body")
 	}
 
 	l := "en-us"
@@ -150,19 +156,23 @@ func (s *ArticleService) Update(a *Article) error {
 		a.Locale = &l
 	}
 
-	ar := &ArticleRequest{Article: a}
+	ar := &ArticleWrapper{Article: a}
 
 	url := fmt.Sprintf("help_center/articles/%v.json", *a.ID)
 
 	req, err := s.client.NewRequest("PUT", url, ar)
 	if err != nil {
-		return err
+		return article, err
 	}
 
-	result := new(ArticleResponse)
+	result := new(ArticleWrapper)
 	_, err = s.client.Do(req, result)
+	if err != nil {
+		return article, err
+	}
 
-	return err
+	article = result.Article
+	return article, err
 }
 
 // Delete func deletes a single article
