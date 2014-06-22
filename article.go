@@ -130,8 +130,7 @@ func (s *ArticleService) Create(a *Article) error {
 	if err != nil {
 		return fmt.Errorf("request failed with: %v\n", err)
 	}
-
-	log.Printf("%v %s\n", resp.StatusCode, resp.Status)
+	logUrls(result.Results)
 
 	return err
 }
@@ -172,8 +171,7 @@ func (s *ArticleService) Update(a *Article) error {
 	if err != nil {
 		return fmt.Errorf("request failed with: %v\n", err)
 	}
-
-	log.Printf("%v %s\n", resp.StatusCode, resp.Status)
+	logUrls(result.Results)
 
 	return err
 }
@@ -198,7 +196,11 @@ func (s *ArticleService) Delete(id *int64) error {
 		return fmt.Errorf("request failed with: %v\n", err)
 	}
 
-	log.Printf("%v %s\n", resp.StatusCode, resp.Status)
-
 	return err
+}
+
+func logUrls(articles []Article) {
+	for _, article := range articles {
+		log.Printf("Article url: %s\n", *article.HtmlURL)
+	}
 }
