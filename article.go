@@ -126,7 +126,7 @@ func (s *ArticleService) Create(a *Article) error {
 	}
 
 	result := new(ArticleResponse)
-	resp, err := s.client.Do(req, result)
+	_, err = s.client.Do(req, result)
 	if err != nil {
 		return fmt.Errorf("request failed with: %v\n", err)
 	}
@@ -167,7 +167,7 @@ func (s *ArticleService) Update(a *Article) error {
 	}
 
 	result := new(ArticleResponse)
-	resp, err := s.client.Do(req, result)
+	_, err = s.client.Do(req, result)
 	if err != nil {
 		return fmt.Errorf("request failed with: %v\n", err)
 	}
@@ -191,7 +191,7 @@ func (s *ArticleService) Delete(id *int64) error {
 		return fmt.Errorf("creating new request failed: %v\n", err)
 	}
 
-	resp, err := s.client.Do(req, nil)
+	_, err = s.client.Do(req, nil)
 	if err != nil {
 		return fmt.Errorf("request failed with: %v\n", err)
 	}
