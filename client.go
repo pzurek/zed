@@ -32,6 +32,7 @@ type Client struct {
 	Tickets  *TicketService
 	Users    *UserService
 	Articles *ArticleService
+	Labels   *LabelService
 }
 
 // NewClient creates a new instance of the Client type
