@@ -1,9 +1,6 @@
 package zd
 
-import (
-	"fmt"
-	"log"
-)
+import "fmt"
 
 // Article struct
 type Article struct {
@@ -127,10 +124,6 @@ func (s *ArticleService) Create(a *Article) error {
 
 	result := new(ArticleResponse)
 	_, err = s.client.Do(req, result)
-	if err != nil {
-		return fmt.Errorf("request failed with: %v\n", err)
-	}
-	logUrls(result.Results)
 
 	return err
 }
@@ -163,15 +156,11 @@ func (s *ArticleService) Update(a *Article) error {
 
 	req, err := s.client.NewRequest("PUT", url, ar)
 	if err != nil {
-		return fmt.Errorf("creating new request failed: %v\n", err)
+		return err
 	}
 
 	result := new(ArticleResponse)
 	_, err = s.client.Do(req, result)
-	if err != nil {
-		return fmt.Errorf("request failed with: %v\n", err)
-	}
-	logUrls(result.Results)
 
 	return err
 }
@@ -197,10 +186,4 @@ func (s *ArticleService) Delete(id *int64) error {
 	}
 
 	return err
-}
-
-func logUrls(articles []Article) {
-	for _, article := range articles {
-		log.Printf("Article url: %s\n", *article.HtmlURL)
-	}
 }
