@@ -15,7 +15,7 @@ type Article struct {
 	AuthorID         *int64   `json:"author_id,omitempty"`
 	CommentsDisabled *bool    `json:"comments_disabled,omitempty"`
 	Outdated         *bool    `json:"outdated,omitempty"`
-	LabelNames       []string `json:"label_names,omitempty",yaml:"label_names,omitempty"`
+	Labels           []string `json:"label_names,omitempty"`
 	Draft            *bool    `json:"draft,omitempty"`
 	Promoted         *bool    `json:"promoted,omitempty"`
 	Position         *int64   `json:"position,omitempty"`
