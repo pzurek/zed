@@ -97,13 +97,13 @@ func (s *TicketService) List() ([]Ticket, error) {
 	return resource, err
 }
 
-// GetAllProblems func
-func (s *TicketService) GetAllProblems() ([]Ticket, error) {
+// ListByView function
+func (s *TicketService) ListByView(id string) ([]Ticket, error) {
 
 	var resource []Ticket
 
-	// Gets all tickets for this view
-	rp, next, _, err := s.getPage("views/31672620/tickets.json") // Hardcoded "Problem tickets" view
+	url := fmt.Sprintf("views/%s/tickets.json", id)
+	rp, next, _, err := s.getPage(url) // Hardcoded "Problem tickets" view
 	if err != nil {
 		return nil, err
 	}
