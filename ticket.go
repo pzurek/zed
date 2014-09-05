@@ -23,17 +23,17 @@ type Ticket struct {
 	AssigneeID          *float64            `json:"assignee_id,omitempty"`
 	OrganizationID      *float64            `json:"organization_id,omitempty"`
 	GroupID             *float64            `json:"group_id,omitempty"`
-	CollaboratorIDs     *[]float64          `json:"collaborator_ids,omitempty"`
+	CollaboratorIDs     []float64           `json:"collaborator_ids,omitempty"`
 	ForumTopicID        *float64            `json:"forum_topic_id,omitempty"`
 	ProblemID           *float64            `json:"problem_id,omitempty"`
 	HasIncidents        *bool               `json:"has_incidents,omitempty"`
 	DueAt               *string             `json:"due_at,omitempty"`
-	Tags                *[]string           `json:"tags,omitempty"`
+	Tags                []string            `json:"tags,omitempty"`
 	Via                 *Via                `json:"via,omitempty"`
-	CustomFields        *[]CustomField      `json:"custom_fields,omitempty"`
+	CustomFields        []CustomField       `json:"custom_fields,omitempty"`
 	SatisfactionRating  *SatisfactionRating `json:"satisfaction_rating,omitempty"`
-	SharingAgreementIds *[]float64          `json:"sharing_agreement_ids,omitempty"`
-	FollowupIds         *[]float64          `json:"followup_ids,omitempty"`
+	SharingAgreementIds []float64           `json:"sharing_agreement_ids,omitempty"`
+	FollowupIds         []float64           `json:"followup_ids,omitempty"`
 	TicketFormID        *float64            `json:"ticket_form_id,omitempty"`
 	BrandID             *float64            `json:"brand_id,omitempty"`
 	CreatedAt           *string             `json:"created_at,omitempty"`
@@ -61,10 +61,20 @@ type SatisfactionRating struct {
 
 // TicketResponse struct
 type TicketResponse struct {
-	Results  *[]Ticket `json:"tickets"`
-	Next     *string   `json:"next_page,omitempty"`
-	Previous *string   `json:"previous_page,omitempty"`
-	Count    *int      `json:"count,omitempty"`
+	Results  []Ticket `json:"tickets"`
+	Next     *string  `json:"next_page,omitempty"`
+	Previous *string  `json:"previous_page,omitempty"`
+	Count    *int     `json:"count,omitempty"`
+}
+
+// TicketUserGroupResponse struct
+type TicketUserGroupResponse struct {
+	Tickets  []Ticket `json:"tickets"`
+	Users    []User   `json:"users,omitempty"`
+	Groups   []Group  `json:"groups,omitempty"`
+	Next     *string  `json:"next_page,omitempty"`
+	Previous *string  `json:"previous_page,omitempty"`
+	Count    *int     `json:"count,omitempty"`
 }
 
 // TicketService struct
@@ -83,7 +93,7 @@ func (s *TicketService) List() ([]Ticket, error) {
 		return nil, err
 	}
 
-	resource = append(resource, *rp...)
+	resource = append(resource, rp...)
 
 	// for next != nil {
 	// 	rp, nx, _, err := s.getPage(*next)
@@ -108,7 +118,7 @@ func (s *TicketService) ListByView(id string) ([]Ticket, error) {
 		return nil, err
 	}
 
-	resource = append(resource, *rp...)
+	resource = append(resource, rp...)
 
 	for next != nil {
 		rp, nx, _, err := s.getPage(*next)
@@ -116,10 +126,41 @@ func (s *TicketService) ListByView(id string) ([]Ticket, error) {
 			return nil, err
 		}
 		next = nx
-		resource = append(resource, *rp...)
+		resource = append(resource, rp...)
 	}
 
 	return resource, err
+}
+
+// ListByViewUG function
+func (s *TicketService) ListByViewUG(id string) ([]Ticket, []User, []Group, error) {
+
+	var tickets []Ticket
+	var users []User
+	var groups []Group
+
+	url := fmt.Sprintf("views/%s/tickets.json?include=users,groups", id)
+	tkts, usrs, grps, next, _, err := s.getPageUG(url)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	tickets = append(tickets, tkts...)
+	users = append(users, usrs...)
+	groups = append(groups, grps...)
+
+	for next != nil {
+		tkts, usrs, grps, nx, _, err := s.getPageUG(*next)
+		if err != nil {
+			return nil, nil, nil, err
+		}
+		next = nx
+		tickets = append(tickets, tkts...)
+		users = append(users, usrs...)
+		groups = append(groups, grps...)
+	}
+
+	return tickets, users, groups, err
 }
 
 // GetProblemIncidents gets all problem tickets
@@ -133,7 +174,7 @@ func (s *TicketService) GetProblemIncidents(id string) ([]Ticket, error) {
 		return nil, err
 	}
 
-	resource = append(resource, *rp...)
+	resource = append(resource, rp...)
 
 	for next != nil {
 		rp, nx, _, err := s.getPage(*next)
@@ -141,7 +182,7 @@ func (s *TicketService) GetProblemIncidents(id string) ([]Ticket, error) {
 			return nil, err
 		}
 		next = nx
-		resource = append(resource, *rp...)
+		resource = append(resource, rp...)
 	}
 
 	return resource, err
@@ -167,7 +208,7 @@ func (s *TicketService) GetProblemIncidentsCount(id string) (int, error) {
 	return *resource, err
 }
 
-func (s *TicketService) getPage(url string) (*[]Ticket, *string, *Response, error) {
+func (s *TicketService) getPage(url string) ([]Ticket, *string, *Response, error) {
 
 	if url == "" {
 		url = "tickets.json"
@@ -187,6 +228,30 @@ func (s *TicketService) getPage(url string) (*[]Ticket, *string, *Response, erro
 	next := response.Next
 	resource := response.Results
 	return resource, next, resp, err
+}
+
+func (s *TicketService) getPageUG(url string) ([]Ticket, []User, []Group, *string, *Response, error) {
+
+	if url == "" {
+		url = "tickets.json?include=users,groups"
+	}
+
+	req, err := s.client.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, nil, nil, nil, nil, err
+	}
+
+	response := new(TicketUserGroupResponse)
+	resp, err := s.client.Do(req, response)
+	if err != nil {
+		return nil, nil, nil, nil, resp, err
+	}
+
+	next := response.Next
+	tickets := response.Tickets
+	users := response.Users
+	groups := response.Groups
+	return tickets, users, groups, next, resp, err
 }
 
 // GetOne method
