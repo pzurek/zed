@@ -4,7 +4,7 @@ import "fmt"
 
 // Article struct
 type Article struct {
-	ID               *int64   `json:"id,omitempty"`
+	ID               *float64 `json:"id,omitempty"`
 	URL              *string  `json:"url,omitempty"`
 	HtmlURL          *string  `json:"html_url,omitempty"`
 	Title            *string  `json:"title,omitempty"`
@@ -12,7 +12,7 @@ type Article struct {
 	Body             *string  `json:"body,omitempty"`
 	Locale           *string  `json:"locale,omitempty"`
 	SourceLocale     *string  `json:"source_locale,omitempty"`
-	AuthorID         *int64   `json:"author_id,omitempty"`
+	AuthorID         *float64 `json:"author_id,omitempty"`
 	CommentsDisabled *bool    `json:"comments_disabled,omitempty"`
 	Outdated         *bool    `json:"outdated,omitempty"`
 	Labels           []string `json:"label_names,omitempty"`
@@ -21,7 +21,7 @@ type Article struct {
 	Position         *int64   `json:"position,omitempty"`
 	VoteSum          *int64   `json:"vote_sum,omitempty"`
 	VoteCount        *int64   `json:"vote_count,omitempty"`
-	SectionID        *int64   `json:"section_id,omitempty"`
+	SectionID        *float64 `json:"section_id,omitempty"`
 	TranslationIds   []int64  `json:"translation_ids,omitempty"`
 	CreatedAt        *string  `json:"created_at,omitempty"`
 	UpdatedAt        *string  `json:"updated_at,omitempty"`

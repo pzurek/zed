@@ -1,13 +1,13 @@
 package zd
 
 type AgentsActivity struct {
-	AgentId         *int    `json:"agent_id,omitempty"`
-	Status          *string `json:"status,omitempty"`
-	AvailableTime   *int    `json:"available_time,omitempty"`
-	CallsAccepted   *int    `json:"calls_accepted,omitempty"`
-	CallsDenied     *int    `json:"calls_denied,omitempty"`
-	CallsMissed     *int    `json:"calls_missed,omitempty"`
-	AverageTalkTime *int    `json:"average_talk_time,omitempty"`
+	AgentID         *float64 `json:"agent_id,omitempty"`
+	Status          *string  `json:"status,omitempty"`
+	AvailableTime   *int     `json:"available_time,omitempty"`
+	CallsAccepted   *int     `json:"calls_accepted,omitempty"`
+	CallsDenied     *int     `json:"calls_denied,omitempty"`
+	CallsMissed     *int     `json:"calls_missed,omitempty"`
+	AverageTalkTime *int     `json:"average_talk_time,omitempty"`
 }
 
 type ActivityResponse struct {
@@ -22,7 +22,7 @@ type ActivityService struct {
 }
 
 func (s *ActivityService) GetActivity() ([]AgentsActivity, error) {
-	resource := make([]AgentsActivity, 0)
+	var resource []AgentsActivity
 
 	rp, next, _, err := s.getPage("")
 	if err != nil {
