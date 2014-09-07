@@ -4,27 +4,27 @@ import "fmt"
 
 // ArticleLabel struct
 type ArticleLabel struct {
-	ID        *float64 `json:"id"`
-	URL       *string  `json:"url"`
-	Name      *string  `json:"name"`
-	CreatedAt *string  `json:"created_at"`
-	UpdatedAt *string  `json:"updated_at"`
+	ID        *float64 `json:"id,omitempty"`
+	URL       *string  `json:"url,omitempty"`
+	Name      *string  `json:"name,omitempty"`
+	CreatedAt *string  `json:"created_at,omitempty"`
+	UpdatedAt *string  `json:"updated_at,omitempty"`
 }
 
 // LabelWrapper struct
 type LabelWrapper struct {
-	Label *ArticleLabel `json:"label"`
+	Label *ArticleLabel `json:"label,omitempty"`
 }
 
 // LabelListResponse struct
 type LabelListResponse struct {
-	Results   []ArticleLabel `json:"labels"`
-	Count     *int64         `json:"count"`
-	Next      *string        `json:"next_page"`
-	Page      *int64         `json:"page"`
-	PageCount *int64         `json:"page_count"`
-	PerPage   *int64         `json:"per_page"`
-	Previous  *string        `json:"previous_page"`
+	Results   []ArticleLabel `json:"labels,omitempty"`
+	Count     *int64         `json:"count,omitempty"`
+	Next      *string        `json:"next_page,omitempty"`
+	Page      *int64         `json:"page,omitempty"`
+	PageCount *int64         `json:"page_count,omitempty"`
+	PerPage   *int64         `json:"per_page,omitempty"`
+	Previous  *string        `json:"previous_page,omitempty"`
 }
 
 // LabelService struct
@@ -128,10 +128,10 @@ func (s *LabelService) getPage(url string) ([]ArticleLabel, *string, *Response, 
 }
 
 // Delete func deletes a single article
-func (s *LabelService) Delete(articleId, id *int64) error {
+func (s *LabelService) Delete(articleID, id *int64) error {
 	var err error
 
-	if articleId == nil {
+	if articleID == nil {
 		return fmt.Errorf("missing required field: article id")
 	}
 
@@ -139,7 +139,7 @@ func (s *LabelService) Delete(articleId, id *int64) error {
 		return fmt.Errorf("missing required field: id")
 	}
 
-	url := fmt.Sprintf("help_center/articles/%v/labels/%v.json", *articleId, *id)
+	url := fmt.Sprintf("help_center/articles/%v/labels/%v.json", *articleID, *id)
 
 	req, err := s.client.NewRequest("DELETE", url, nil)
 	if err != nil {

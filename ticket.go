@@ -8,13 +8,12 @@ import "fmt"
 
 // Ticket struct
 type Ticket struct {
-	ID         *float64 `json:"id,omitempty"`
-	URL        *string  `json:"url,omitempty"`
-	ExternalID *string  `json:"external_id,omitempty"`
-	Type       *string  `json:"type,omitempty"`
-	Subject    *string  `json:"subject,omitempty"`
-	// No description for now it's pointless and clutters the db.
-	// Description         *string             `json:"description,omitempty"`
+	ID                  *float64            `json:"id,omitempty"`
+	URL                 *string             `json:"url,omitempty"`
+	ExternalID          *string             `json:"external_id,omitempty"`
+	Type                *string             `json:"type,omitempty"`
+	Subject             *string             `json:"subject,omitempty"`
+	Description         *string             `json:"description,omitempty"`
 	Priority            *string             `json:"priority,omitempty"`
 	Status              *string             `json:"status,omitempty"`
 	Recipient           *string             `json:"recipient,omitempty"`
@@ -49,14 +48,14 @@ type Via struct {
 // CustomField struct
 type CustomField struct {
 	ID    *float64     `json:"id,omitempty"`
-	Value *interface{} `json:"value"`
+	Value *interface{} `json:"value,omitempty"`
 }
 
 // SatisfactionRating struct
 type SatisfactionRating struct {
 	ID      *float64 `json:"id,omitempty"`
-	Score   *string  `json:"score"`
-	Comment *string  `json:"comment"`
+	Score   *string  `json:"score,omitempty"`
+	Comment *string  `json:"comment,omitempty"`
 }
 
 // TicketResponse struct
@@ -69,7 +68,7 @@ type TicketResponse struct {
 
 // TicketUserGroupResponse struct
 type TicketUserGroupResponse struct {
-	Tickets  []Ticket `json:"tickets"`
+	Tickets  []Ticket `json:"tickets,omitempty"`
 	Users    []User   `json:"users,omitempty"`
 	Groups   []Group  `json:"groups,omitempty"`
 	Next     *string  `json:"next_page,omitempty"`

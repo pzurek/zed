@@ -1,20 +1,20 @@
 package zd
 
 type AgentsActivity struct {
-	AgentId         *int    `json:"agent_id"`
-	Status          *string `json:"status"`
-	AvailableTime   *int    `json:"available_time"`
-	CallsAccepted   *int    `json:"calls_accepted"`
-	CallsDenied     *int    `json:"calls_denied"`
-	CallsMissed     *int    `json:"calls_missed"`
-	AverageTalkTime *int    `json:"average_talk_time"`
+	AgentId         *int    `json:"agent_id,omitempty"`
+	Status          *string `json:"status,omitempty"`
+	AvailableTime   *int    `json:"available_time,omitempty"`
+	CallsAccepted   *int    `json:"calls_accepted,omitempty"`
+	CallsDenied     *int    `json:"calls_denied,omitempty"`
+	CallsMissed     *int    `json:"calls_missed,omitempty"`
+	AverageTalkTime *int    `json:"average_talk_time,omitempty"`
 }
 
 type ActivityResponse struct {
-	Activities *[]AgentsActivity `json:"users"`
-	Next       *string           `json:"next_page,omitempty"`
-	Previous   *string           `json:"previous_page,omitempty"`
-	Count      *int              `json:"count,omitempty"`
+	Activities []AgentsActivity `json:"users,omitempty"`
+	Next       *string          `json:"next_page,omitempty"`
+	Previous   *string          `json:"previous_page,omitempty"`
+	Count      *int             `json:"count,omitempty"`
 }
 
 type ActivityService struct {
@@ -29,7 +29,7 @@ func (s *ActivityService) GetActivity() ([]AgentsActivity, error) {
 		return nil, err
 	}
 
-	resource = append(resource, *rp...)
+	resource = append(resource, rp...)
 
 	for next != nil {
 		rp, nx, _, err := s.getPage(*next)
@@ -37,13 +37,13 @@ func (s *ActivityService) GetActivity() ([]AgentsActivity, error) {
 			return nil, err
 		}
 		next = nx
-		resource = append(resource, *rp...)
+		resource = append(resource, rp...)
 	}
 
 	return resource, err
 }
 
-func (s *ActivityService) getPage(url string) (*[]AgentsActivity, *string, *Response, error) {
+func (s *ActivityService) getPage(url string) ([]AgentsActivity, *string, *Response, error) {
 
 	if url == "" {
 		url = "users.json?role=agent"

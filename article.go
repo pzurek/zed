@@ -7,10 +7,10 @@ type Article struct {
 	ID               *int64   `json:"id,omitempty"`
 	URL              *string  `json:"url,omitempty"`
 	HtmlURL          *string  `json:"html_url,omitempty"`
-	Title            *string  `json:"title"`
+	Title            *string  `json:"title,omitempty"`
 	Name             *string  `json:"name,omitempty"`
 	Body             *string  `json:"body,omitempty"`
-	Locale           *string  `json:"locale"`
+	Locale           *string  `json:"locale,omitempty"`
 	SourceLocale     *string  `json:"source_locale,omitempty"`
 	AuthorID         *int64   `json:"author_id,omitempty"`
 	CommentsDisabled *bool    `json:"comments_disabled,omitempty"`
@@ -34,13 +34,13 @@ type ArticleWrapper struct {
 
 // ArticleListResponse struct
 type ArticleListResponse struct {
-	Results   []Article `json:"articles"`
-	Count     *int64    `json:"count"`
-	Next      *string   `json:"next_page"`
-	Page      *int64    `json:"page"`
-	PageCount *int64    `json:"page_count"`
-	PerPage   *int64    `json:"per_page"`
-	Previous  *string   `json:"previous_page"`
+	Results   []Article `json:"articles,omitempty"`
+	Count     *int64    `json:"count,omitempty"`
+	Next      *string   `json:"next_page,omitempty"`
+	Page      *int64    `json:"page,omitempty"`
+	PageCount *int64    `json:"page_count,omitempty"`
+	PerPage   *int64    `json:"per_page,omitempty"`
+	Previous  *string   `json:"previous_page,omitempty"`
 }
 
 // ArticleService struct
