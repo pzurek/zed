@@ -116,7 +116,7 @@ func (s *ArticleService) Create(a *Article) (*Article, error) {
 
 	ar := &ArticleWrapper{Article: a}
 
-	url := fmt.Sprintf("help_center/sections/%v/articles.json", *a.SectionID)
+	url := fmt.Sprintf("help_center/sections/%v/articles.json", int(*a.SectionID))
 
 	req, err := s.client.NewRequest("POST", url, ar)
 	if err != nil {
@@ -158,7 +158,7 @@ func (s *ArticleService) Update(a *Article) (*Article, error) {
 
 	ar := &ArticleWrapper{Article: a}
 
-	url := fmt.Sprintf("help_center/articles/%v.json", *a.ID)
+	url := fmt.Sprintf("help_center/articles/%v.json", int(*a.ID))
 
 	req, err := s.client.NewRequest("PUT", url, ar)
 	if err != nil {
@@ -183,7 +183,7 @@ func (s *ArticleService) Delete(id *int64) error {
 		return fmt.Errorf("missing article id")
 	}
 
-	url := fmt.Sprintf("help_center/articles/%v.json", *id)
+	url := fmt.Sprintf("help_center/articles/%v.json", int(*id))
 
 	req, err := s.client.NewRequest("DELETE", url, nil)
 	if err != nil {
