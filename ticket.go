@@ -1,7 +1,3 @@
-/*
-
-*/
-
 package zd
 
 import "fmt"
