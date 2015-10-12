@@ -1,5 +1,9 @@
 package zd
 
+import (
+	"time"
+)
+
 type OrganizationResponse struct {
 	Organizations []Organization `json:"organizations,omitempty"`
 	NextPage      *string        `json:"next_page,omitempty"`
