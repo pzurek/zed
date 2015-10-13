@@ -10,24 +10,24 @@ type OrganizationWrapper struct {
 
 type OrganizationListResponse struct {
 	Organizations []Organization `json:"organizations"`
-	NextPage      string        `json:"next_page,omitempty"`
-	PreviousPage  string        `json:"previous_page,omitempty"`
-	Count         int           `json:"count,omitempty"`
+	NextPage      *string        `json:"next_page,omitempty"`
+	PreviousPage  *string        `json:"previous_page,omitempty"`
+	Count         *int           `json:"count,omitempty"`
 }
 
 type Organization struct {
-	URL                string           `json:"url,omitempty"`
-	ID                 int              `json:"id,omitempty"`
-	Name               string           `json:"name,omitempty"`
-	SharedTickets      bool             `json:"shared_tickets,omitempty"`
-	SharedComments     bool             `json:"shared_comments,omitempty"`
-	ExternalID         string           `json:"external_id,omitempty"`
-	CreatedAt          string           `json:"created_at,omitempty"`
-	UpdatedAt          string           `json:"updated_at,omitempty"`
+	URL                *string           `json:"url,omitempty"`
+	ID                 *int              `json:"id,omitempty"`
+	Name               *string           `json:"name,omitempty"`
+	SharedTickets      *bool             `json:"shared_tickets,omitempty"`
+	SharedComments     *bool             `json:"shared_comments,omitempty"`
+	ExternalID         *string           `json:"external_id,omitempty"`
+	CreatedAt          *string           `json:"created_at,omitempty"`
+	UpdatedAt          *string           `json:"updated_at,omitempty"`
 	DomainNames        []string          `json:"domain_names,omitempty"`
-	Details            string           `json:"details,omitempty"`
-	Notes              string           `json:"notes,omitempty"`
-	GroupID            string           `json:"group_id,omitempty"`
+	Details            *string           `json:"details,omitempty"`
+	Notes              *string           `json:"notes,omitempty"`
+	GroupID            *string           `json:"group_id,omitempty"`
 	Tags               []string          `json:"tags,omitempty"`
 	OrganizationFields map[string]string `json:"organization_fields,omitempty"`
 }
@@ -50,7 +50,7 @@ func (s *OrganizationService) GetOrganizationById(organizationID string) (*Organ
 
 	resp, err := s.client.Do(req, &org)
 	if err != nil {
-		return nil, nil,  err
+		return nil, nil, err
 	}
 
 	return org.Organization, resp, err
