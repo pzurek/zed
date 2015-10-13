@@ -2,7 +2,7 @@ package examples
 
 import (
 	"fmt"
-	"github.com/jonnonz/zed"
+	"github.com/pzurek/zed"
 )
 
 func organizationExamples() {
