@@ -9,10 +9,10 @@ type OrganizationWrapper struct {
 }
 
 type OrganizationResponse struct {
-	Organizations Organization   `json:"organizations,omitempty"`
-	NextPage      *string        `json:"next_page,omitempty"`
-	PreviousPage  *string        `json:"previous_page,omitempty"`
-	Count         *int           `json:"count,omitempty"`
+	Organizations Organization `json:"organizations,omitempty"`
+	NextPage      *string      `json:"next_page,omitempty"`
+	PreviousPage  *string      `json:"previous_page,omitempty"`
+	Count         *int         `json:"count,omitempty"`
 }
 
 type Organization struct {
@@ -32,13 +32,13 @@ type Organization struct {
 	OrganizationFields map[string]string `json:"organization_fields,omitempty"`
 }
 
-// TicketService struct
+// OrganizationService struct
 type OrganizationService struct {
 	client *Client
 }
 
-// GetOrganizationById finds an organization in zendesk by id
-func (s *OrganizationService) GetOrganizationById(organizationID string) (*Organization, *Response, error) {
+// GetOrganizationByID finds an organization in Zendesk by ID
+func (s *OrganizationService) GetOrganizationByID(organizationID string) (*Organization, *Response, error) {
 	org := OrganizationWrapper{}
 
 	url := fmt.Sprintf("organizations/%s.json", organizationID)
@@ -58,11 +58,9 @@ func (s *OrganizationService) GetOrganizationById(organizationID string) (*Organ
 
 // UpdateOrganization updates and organization by id
 func (s *OrganizationService) UpdateOrganization(org *Organization) (*Organization, error) {
-	var organization *Organization
-	var err error
+	organization := &Organization{}
 
 	url := fmt.Sprintf("organizations/%v.json", org.ID)
-
 	or := &OrganizationWrapper{Organization: org}
 
 	req, err := s.client.NewRequest("PUT", url, or)
@@ -71,24 +69,20 @@ func (s *OrganizationService) UpdateOrganization(org *Organization) (*Organizati
 	}
 
 	result := OrganizationWrapper{}
-
 	_, err = s.client.Do(req, result)
 	if err != nil {
 		return organization, err
 	}
 
 	organization = result.Organization
-
 	return organization, err
 }
 
 //CreateOrganization creates a new organization
 func (s *OrganizationService) CreateOrganization(org *Organization) (*Organization, error) {
-	var organization *Organization
-	var err error
+	organization := &Organization{}
 
 	or := &OrganizationWrapper{Organization: org}
-
 	url := fmt.Sprintf("organizations.json")
 
 	req, err := s.client.NewRequest("POST", url, or)
@@ -98,12 +92,10 @@ func (s *OrganizationService) CreateOrganization(org *Organization) (*Organizati
 
 	result := OrganizationWrapper{}
 	_, err = s.client.Do(req, result)
-
 	if err != nil {
 		return organization, err
 	}
 
 	organization = result.Organization
-
 	return organization, nil
 }

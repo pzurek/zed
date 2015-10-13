@@ -2,6 +2,7 @@ package examples
 
 import (
 	"fmt"
+
 	"github.com/pzurek/zed"
 )
 
@@ -10,7 +11,7 @@ func organizationExamples() {
 	client := zd.NewClient("zendesk_domain", "email/token", "token", nil)
 
 	// get Organization
-	existingOrg, _, err := client.Organizations.GetOrganizationById("org_id")
+	existingOrg, _, err := client.Organizations.GetOrganizationByID("org_id")
 
 	if err != nil {
 		fmt.Println("Oh no!")
@@ -20,7 +21,8 @@ func organizationExamples() {
 	existingOrg.Tags = []string{"test_tags"}
 
 	// Change Name
-	existingOrg.Name = "Oh hello!"
+	name := "Oh hello"
+	existingOrg.Name = &name
 
 	// Update organization fields
 	existingOrg.OrganizationFields = map[string]string{
@@ -28,13 +30,14 @@ func organizationExamples() {
 	}
 
 	// update the organization, handle any errors etc..
-	updatedOrganization , _ := client.Organizations.UpdateOrganization(existingOrg)
+	updatedOrganization, _ := client.Organizations.UpdateOrganization(existingOrg)
 
 	fmt.Println(updatedOrganization.UpdatedAt)
 
 	// create a new org
+	orgName := "brand new org"
 	newOrg := zd.Organization{
-		Name: "brand new org",
+		Name: &orgName,
 	}
 
 	response, _ := client.Organizations.CreateOrganization(&newOrg)

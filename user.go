@@ -75,7 +75,7 @@ type Thumbnail struct {
 }
 
 func (s *UserService) Get() ([]User, error) {
-	var resource []User
+	resource := []User{}
 
 	rp, next, _, err := s.getPage("")
 	if err != nil {
@@ -107,7 +107,7 @@ func (s *UserService) getPage(url string) ([]User, *string, *Response, error) {
 		return nil, nil, nil, err
 	}
 
-	response := new(UserResponse)
+	response := UserResponse{}
 	resp, err := s.client.Do(req, response)
 	if err != nil {
 		return nil, nil, resp, err

@@ -13,7 +13,7 @@ import (
 const (
 	baseURLString  = ".zendesk.com/api/v2/"
 	libraryVersion = "0.1"
-	userAgent      = "zed/" + libraryVersion
+	userAgent      = "github.com/pzurek/zed/" + libraryVersion
 )
 
 var (
@@ -67,7 +67,7 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 		url = fmt.Sprintf("https://%s%s%s", subdomain, baseURLString, urlStr)
 	}
 
-	buf := new(bytes.Buffer)
+	buf := &bytes.Buffer{}
 	if body != nil {
 		err := json.NewEncoder(buf).Encode(body)
 		if err != nil {
@@ -81,7 +81,6 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 	}
 
 	req.SetBasicAuth(username, password)
-
 	req.Header.Add("User-Agent", c.UserAgent)
 	req.Header.Add("Content-Type", "application/json")
 

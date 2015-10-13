@@ -22,7 +22,7 @@ type ActivityService struct {
 }
 
 func (s *ActivityService) GetActivity() ([]AgentsActivity, error) {
-	var resource []AgentsActivity
+	resource := []AgentsActivity{}
 
 	rp, next, _, err := s.getPage("")
 	if err != nil {
@@ -54,7 +54,7 @@ func (s *ActivityService) getPage(url string) ([]AgentsActivity, *string, *Respo
 		return nil, nil, nil, err
 	}
 
-	response := new(ActivityResponse)
+	response := ActivityResponse{}
 	resp, err := s.client.Do(req, response)
 	if err != nil {
 		return nil, nil, resp, err
