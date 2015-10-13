@@ -79,10 +79,9 @@ type TicketService struct {
 
 // List returns a slice of all products
 func (s *TicketService) List() ([]Ticket, error) {
+	resource := []Ticket{}
 
-	var resource []Ticket
-
-	rp, _, _, err := s.getPage("")
+	rp, next, _, err := s.getPage("")
 
 	if err != nil {
 		return nil, err
@@ -90,25 +89,24 @@ func (s *TicketService) List() ([]Ticket, error) {
 
 	resource = append(resource, rp...)
 
-	// for next != nil {
-	// 	rp, nx, _, err := s.getPage(*next)
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// 	next = nx
-	// 	resource = append(resource, *rp...)
-	// }
+	for next != nil {
+		rp, nx, _, err := s.getPage(*next)
+		if err != nil {
+			return nil, err
+		}
+		next = nx
+		resource = append(resource, rp...)
+	}
 
 	return resource, err
 }
 
 // ListByView function
 func (s *TicketService) ListByView(id string) ([]Ticket, error) {
-
-	var resource []Ticket
+	resource := []Ticket{}
 
 	url := fmt.Sprintf("views/%s/tickets.json", id)
-	rp, next, _, err := s.getPage(url) // Hardcoded "Problem tickets" view
+	rp, next, _, err := s.getPage(url)
 	if err != nil {
 		return nil, err
 	}
@@ -130,9 +128,9 @@ func (s *TicketService) ListByView(id string) ([]Ticket, error) {
 // ListByViewUG function
 func (s *TicketService) ListByViewUG(id string) ([]Ticket, []User, []Group, error) {
 
-	var tickets []Ticket
-	var users []User
-	var groups []Group
+	tickets := []Ticket{}
+	users := []User{}
+	groups := []Group{}
 
 	url := fmt.Sprintf("views/%s/tickets.json?include=users,groups", id)
 	tkts, usrs, grps, next, _, err := s.getPageUG(url)
@@ -160,7 +158,7 @@ func (s *TicketService) ListByViewUG(id string) ([]Ticket, []User, []Group, erro
 
 // GetProblemIncidents gets all problem tickets
 func (s *TicketService) GetProblemIncidents(id string) ([]Ticket, error) {
-	var resource []Ticket
+	resource := []Ticket{}
 
 	url := fmt.Sprintf("tickets/%s/incidents.json", id)
 
@@ -193,7 +191,7 @@ func (s *TicketService) GetProblemIncidentsCount(id string) (int, error) {
 		return 0, err
 	}
 
-	response := new(TicketResponse)
+	response := TicketResponse{}
 	_, err = s.client.Do(req, response)
 	if err != nil {
 		return 0, err
@@ -214,7 +212,7 @@ func (s *TicketService) getPage(url string) ([]Ticket, *string, *Response, error
 		return nil, nil, nil, err
 	}
 
-	response := new(TicketResponse)
+	response := TicketResponse{}
 	resp, err := s.client.Do(req, response)
 	if err != nil {
 		return nil, nil, resp, err
@@ -236,7 +234,7 @@ func (s *TicketService) getPageUG(url string) ([]Ticket, []User, []Group, *strin
 		return nil, nil, nil, nil, nil, err
 	}
 
-	response := new(TicketUserGroupResponse)
+	response := TicketUserGroupResponse{}
 	resp, err := s.client.Do(req, response)
 	if err != nil {
 		return nil, nil, nil, nil, resp, err
@@ -258,7 +256,7 @@ func (s *TicketService) GetOne(id string) (*Ticket, *Response, error) {
 		return nil, nil, err
 	}
 
-	ticket := new(Ticket)
+	ticket := &Ticket{}
 	resp, err := s.client.Do(req, &ticket)
 	if err != nil {
 		return nil, resp, err

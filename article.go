@@ -50,7 +50,7 @@ type ArticleService struct {
 
 // GetAll function
 func (s *ArticleService) GetAll() ([]Article, error) {
-	var resource []Article
+	resource := []Article{}
 	rp, next, _, err := s.getPage("")
 	if err != nil {
 		return resource, err
@@ -80,7 +80,7 @@ func (s *ArticleService) getPage(url string) (*[]Article, *string, *Response, er
 		return nil, nil, nil, err
 	}
 
-	result := new(ArticleListResponse)
+	result := ArticleListResponse{}
 	resp, err := s.client.Do(req, result)
 	if err != nil {
 		return nil, nil, resp, err
@@ -93,8 +93,7 @@ func (s *ArticleService) getPage(url string) (*[]Article, *string, *Response, er
 
 // Create func creates a single new article
 func (s *ArticleService) Create(a *Article) (*Article, error) {
-	var article *Article
-	var err error
+	article := &Article{}
 
 	if a.SectionID == nil {
 		return article, fmt.Errorf("missing required field: section id")
@@ -123,7 +122,7 @@ func (s *ArticleService) Create(a *Article) (*Article, error) {
 		return article, err
 	}
 
-	result := new(ArticleWrapper)
+	result := ArticleWrapper{}
 	_, err = s.client.Do(req, result)
 	if err != nil {
 		return article, err
@@ -135,8 +134,7 @@ func (s *ArticleService) Create(a *Article) (*Article, error) {
 
 // Update func updates a single article
 func (s *ArticleService) Update(a *Article) (*Article, error) {
-	var article *Article
-	var err error
+	article := &Article{}
 
 	if a.ID == nil {
 		return article, fmt.Errorf("missing required field: article id")
@@ -165,7 +163,7 @@ func (s *ArticleService) Update(a *Article) (*Article, error) {
 		return article, err
 	}
 
-	result := new(ArticleWrapper)
+	result := ArticleWrapper{}
 	_, err = s.client.Do(req, result)
 	if err != nil {
 		return article, err
@@ -177,8 +175,6 @@ func (s *ArticleService) Update(a *Article) (*Article, error) {
 
 // Delete func deletes a single article
 func (s *ArticleService) Delete(id *int64) error {
-	var err error
-
 	if id == nil {
 		return fmt.Errorf("missing article id")
 	}

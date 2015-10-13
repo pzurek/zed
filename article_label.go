@@ -34,8 +34,7 @@ type LabelService struct {
 
 // Create func creates a single new article
 func (s *LabelService) Create(id *int64, l *ArticleLabel) (*ArticleLabel, error) {
-	var label *ArticleLabel
-	var err error
+	label := &ArticleLabel{}
 
 	if l.Name == nil {
 		return label, fmt.Errorf("missing required field: label name")
@@ -50,7 +49,7 @@ func (s *LabelService) Create(id *int64, l *ArticleLabel) (*ArticleLabel, error)
 		return label, err
 	}
 
-	result := new(LabelWrapper)
+	result := LabelWrapper{}
 	_, err = s.client.Do(req, result)
 	if err != nil {
 		return label, err
@@ -62,7 +61,7 @@ func (s *LabelService) Create(id *int64, l *ArticleLabel) (*ArticleLabel, error)
 
 // GetAll function lists labels used in all articles
 func (s *LabelService) GetAll() ([]ArticleLabel, error) {
-	var resource []ArticleLabel
+	resource := []ArticleLabel{}
 
 	rp, next, _, err := s.getPage("")
 	if err != nil {
@@ -84,7 +83,7 @@ func (s *LabelService) GetAll() ([]ArticleLabel, error) {
 
 // GetByArticleID function lists lablels used in an article with a given id
 func (s *LabelService) GetByArticleID(id *int64) ([]ArticleLabel, error) {
-	var resource []ArticleLabel
+	resource := []ArticleLabel{}
 
 	url := fmt.Sprintf("help_center/articles/%v/labels.json", *id)
 	rp, next, _, err := s.getPage(url)
@@ -116,7 +115,7 @@ func (s *LabelService) getPage(url string) ([]ArticleLabel, *string, *Response, 
 		return nil, nil, nil, err
 	}
 
-	result := new(LabelListResponse)
+	result := LabelListResponse{}
 	resp, err := s.client.Do(req, result)
 	if err != nil {
 		return nil, nil, resp, err
@@ -129,8 +128,6 @@ func (s *LabelService) getPage(url string) ([]ArticleLabel, *string, *Response, 
 
 // Delete func deletes a single article
 func (s *LabelService) Delete(articleID, id *int64) error {
-	var err error
-
 	if articleID == nil {
 		return fmt.Errorf("missing required field: article id")
 	}
