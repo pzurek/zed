@@ -77,7 +77,7 @@ type TicketService struct {
 	client *Client
 }
 
-// List returns a slice of all products
+// List returns a slice of all tickets
 func (s *TicketService) List() ([]Ticket, error) {
 
 	var resource []Ticket
@@ -89,15 +89,6 @@ func (s *TicketService) List() ([]Ticket, error) {
 	}
 
 	resource = append(resource, rp...)
-
-	// for next != nil {
-	// 	rp, nx, _, err := s.getPage(*next)
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// 	next = nx
-	// 	resource = append(resource, *rp...)
-	// }
 
 	return resource, err
 }
