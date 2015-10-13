@@ -32,12 +32,12 @@ type Organization struct {
 	OrganizationFields map[string]string `json:"organization_fields,omitempty"`
 }
 
-// TicketService struct
+// OrganizationService struct
 type OrganizationService struct {
 	client *Client
 }
 
-// GetOrganizationById finds an organization in Zendesk by ID
+// GetOrganizationByID finds an organization in Zendesk by ID
 func (s *OrganizationService) GetOrganizationByID(organizationID string) (*Organization, *Response, error) {
 	org := OrganizationWrapper{}
 
