@@ -37,7 +37,7 @@ type OrganizationService struct {
 	client *Client
 }
 
-// GetOrganizationById finds an organization in zendesk byt id
+// GetOrganizationById finds an organization in zendesk by id
 func (s *OrganizationService) GetOrganizationById(organizationID string) (*Organization, *Response, error) {
 	org := OrganizationWrapper{}
 
