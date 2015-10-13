@@ -8,10 +8,6 @@ type OrganizationWrapper struct {
 	Organization *Organization `json:"organization"`
 }
 
-type OrganizationResponse struct {
-	Organization *Organization `json:"organization"`
-}
-
 type OrganizationListResponse struct {
 	Organizations []Organization `json:"organizations"`
 	NextPage      string        `json:"next_page,omitempty"`
@@ -43,7 +39,7 @@ type OrganizationService struct {
 
 // GetOrganizationById finds an organization in zendesk byt id
 func (s *OrganizationService) GetOrganizationById(organizationID string) (*Organization, *Response, error) {
-	org := OrganizationResponse{}
+	org := OrganizationWrapper{}
 
 	url := fmt.Sprintf("organizations/%s.json", organizationID)
 
@@ -65,20 +61,16 @@ func (s *OrganizationService) UpdateOrganization(org *Organization) (*Organizati
 	var organization *Organization
 	var err error
 
-	fmt.Println(org)
-
 	url := fmt.Sprintf("organizations/%v.json", org.ID)
 
 	or := &OrganizationWrapper{Organization: org}
-
-	fmt.Println(or.Organization.Notes)
 
 	req, err := s.client.NewRequest("PUT", url, or)
 	if err != nil {
 		return organization, err
 	}
 
-	result := new(OrganizationWrapper)
+	result := OrganizationWrapper{}
 
 	_, err = s.client.Do(req, result)
 	if err != nil {
@@ -104,7 +96,7 @@ func (s *OrganizationService) CreateOrganization(org *Organization) (*Organizati
 		return organization, err
 	}
 
-	result := new(OrganizationResponse)
+	result := OrganizationWrapper{}
 	_, err = s.client.Do(req, result)
 
 	if err != nil {
