@@ -5,11 +5,11 @@ import (
 )
 
 type OrganizationWrapper struct {
-	Organization *Organization `json:"organization"`
+	Organization *Organization `   json:"organization"`
 }
 
-type OrganizationListResponse struct {
-	Organizations []Organization `json:"organizations"`
+type OrganizationResponse struct {
+	Organizations Organization   `json:"organizations,omitempty"`
 	NextPage      *string        `json:"next_page,omitempty"`
 	PreviousPage  *string        `json:"previous_page,omitempty"`
 	Count         *int           `json:"count,omitempty"`
