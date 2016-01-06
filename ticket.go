@@ -18,7 +18,7 @@ type Ticket struct {
 	Status              *string             `json:"status,omitempty"`
 	Recipient           *string             `json:"recipient,omitempty"`
 	RequesterID         *float64            `json:"requester_id,omitempty"`
-	Requester           *Requester          `json:"requester_id,omitempty"`
+	Requester           *User               `json:"requester,omitempty"`
 	SubmitterID         *float64            `json:"submitter_id,omitempty"`
 	AssigneeID          *float64            `json:"assignee_id,omitempty"`
 	OrganizationID      *float64            `json:"organization_id,omitempty"`
@@ -38,13 +38,6 @@ type Ticket struct {
 	BrandID             *float64            `json:"brand_id,omitempty"`
 	CreatedAt           *string             `json:"created_at,omitempty"`
 	UpdatedAt           *string             `json:"updated_at,omitempty"`
-}
-
-// Requester Struct
-type Requester struct {
-	LocaleID *string `json:"locale_id,omitempty"`
-	Name     *string `json:"name,omitempty"`
-	Email    *string `json:"email,omitempty"`
 }
 
 // Via struct
