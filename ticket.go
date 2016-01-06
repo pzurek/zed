@@ -12,6 +12,7 @@ type Ticket struct {
 	ExternalID          *string             `json:"external_id,omitempty"`
 	Type                *string             `json:"type,omitempty"`
 	Subject             *string             `json:"subject,omitempty"`
+	Comment             *string             `json:"comment,omitempty"`
 	Description         *string             `json:"description,omitempty"`
 	Priority            *string             `json:"priority,omitempty"`
 	Status              *string             `json:"status,omitempty"`
@@ -65,12 +66,17 @@ type SatisfactionRating struct {
 	Comment *string  `json:"comment,omitempty"`
 }
 
-// TicketResponse struct
-type TicketResponse struct {
+// TicketCollectionResponse struct
+type TicketCollectionResponse struct {
 	Results  []Ticket `json:"tickets"`
 	Next     *string  `json:"next_page,omitempty"`
 	Previous *string  `json:"previous_page,omitempty"`
 	Count    *int     `json:"count,omitempty"`
+}
+
+// TicketResponse struct
+type TicketResponse struct {
+	Ticket Ticket `json:"ticket"`
 }
 
 // TicketUserGroupResponse struct
@@ -202,7 +208,7 @@ func (s *TicketService) GetProblemIncidentsCount(id string) (int, error) {
 		return 0, err
 	}
 
-	response := TicketResponse{}
+	response := TicketCollectionResponse{}
 	_, err = s.client.Do(req, response)
 	if err != nil {
 		return 0, err
@@ -223,7 +229,7 @@ func (s *TicketService) getPage(url string) ([]Ticket, *string, *Response, error
 		return nil, nil, nil, err
 	}
 
-	response := TicketResponse{}
+	response := TicketCollectionResponse{}
 	resp, err := s.client.Do(req, response)
 	if err != nil {
 		return nil, nil, resp, err
