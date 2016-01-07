@@ -1,6 +1,9 @@
 package zd
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 // Ticket struct
 type Ticket struct {
@@ -9,11 +12,13 @@ type Ticket struct {
 	ExternalID          *string             `json:"external_id,omitempty"`
 	Type                *string             `json:"type,omitempty"`
 	Subject             *string             `json:"subject,omitempty"`
+	Comment             *string             `json:"comment,omitempty"`
 	Description         *string             `json:"description,omitempty"`
 	Priority            *string             `json:"priority,omitempty"`
 	Status              *string             `json:"status,omitempty"`
 	Recipient           *string             `json:"recipient,omitempty"`
 	RequesterID         *float64            `json:"requester_id,omitempty"`
+	Requester           *User               `json:"requester,omitempty"`
 	SubmitterID         *float64            `json:"submitter_id,omitempty"`
 	AssigneeID          *float64            `json:"assignee_id,omitempty"`
 	OrganizationID      *float64            `json:"organization_id,omitempty"`
@@ -54,12 +59,17 @@ type SatisfactionRating struct {
 	Comment *string  `json:"comment,omitempty"`
 }
 
-// TicketResponse struct
-type TicketResponse struct {
+// TicketCollectionResponse struct
+type TicketCollectionResponse struct {
 	Results  []Ticket `json:"tickets"`
 	Next     *string  `json:"next_page,omitempty"`
 	Previous *string  `json:"previous_page,omitempty"`
 	Count    *int     `json:"count,omitempty"`
+}
+
+// TicketResponse struct
+type TicketResponse struct {
+	Ticket Ticket `json:"ticket"`
 }
 
 // TicketUserGroupResponse struct
@@ -191,7 +201,7 @@ func (s *TicketService) GetProblemIncidentsCount(id string) (int, error) {
 		return 0, err
 	}
 
-	response := TicketResponse{}
+	response := TicketCollectionResponse{}
 	_, err = s.client.Do(req, response)
 	if err != nil {
 		return 0, err
@@ -212,7 +222,7 @@ func (s *TicketService) getPage(url string) ([]Ticket, *string, *Response, error
 		return nil, nil, nil, err
 	}
 
-	response := TicketResponse{}
+	response := TicketCollectionResponse{}
 	resp, err := s.client.Do(req, response)
 	if err != nil {
 		return nil, nil, resp, err
@@ -258,6 +268,30 @@ func (s *TicketService) GetOne(id string) (*Ticket, *Response, error) {
 
 	ticket := &Ticket{}
 	resp, err := s.client.Do(req, &ticket)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return ticket, resp, err
+}
+
+// Create a new Zendesk Ticket
+func (s *TicketService) Create(ticket *Ticket) (*Ticket, *Response, error) {
+	url := "tickets.json"
+
+	body, err := json.Marshal(&ticket)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	req, err := s.client.NewRequest("POST", url, body)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	response := TicketResponse{}
+	resp, err := s.client.Do(req, response)
 	if err != nil {
 		return nil, resp, err
 	}
