@@ -6,7 +6,7 @@ import (
 
 // OrganizationSearchResponse struct
 type OrganizationSearchResponse struct {
-	Organizations Organization `'json:"results,omitempty"`
+	Organizations Organization `json:"results,omitempty"`
 	NextPage      *string      `json:"next_page,omitempty"`
 	PreviousPage  *string      `json:"previous_page,omitempty"`
 	Count         *int         `json:"count,omitempty"`
