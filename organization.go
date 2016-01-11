@@ -4,6 +4,13 @@ import (
 	"fmt"
 )
 
+type OrganizationSearchResponse struct {
+	Organizations Organization `'json:"results,omitempty"`
+	NextPage      *string      `json:"next_page,omitempty"`
+	PreviousPage  *string      `json:"previous_page,omitempty"`
+	Count         *int         `json:"count,omitempty"`
+}
+
 type OrganizationWrapper struct {
 	Organization *Organization `   json:"organization"`
 }
@@ -69,7 +76,7 @@ func (s *OrganizationService) UpdateOrganization(org *Organization) (*Organizati
 	}
 
 	result := OrganizationWrapper{}
-	_, err = s.client.Do(req, result)
+	_, err = s.client.Do(req, &result)
 	if err != nil {
 		return organization, err
 	}
@@ -91,11 +98,29 @@ func (s *OrganizationService) CreateOrganization(org *Organization) (*Organizati
 	}
 
 	result := OrganizationWrapper{}
-	_, err = s.client.Do(req, result)
+	_, err = s.client.Do(req, &result)
 	if err != nil {
 		return organization, err
 	}
 
 	organization = result.Organization
 	return organization, nil
+}
+
+// SearchOrganizationByName searches the organization by name
+func (s *OrganizationService) SearchOrganizationByName(orgName string) (*OrganizationSearchResponse, error) {
+	org := &OrganizationSearchResponse{}
+	url := fmt.Sprintf("search?query=type:organization+name:%s", orgName)
+
+	req, err := s.client.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = s.client.Do(req, &org)
+	if err != nil {
+		return nil, err
+	}
+
+	return org, nil
 }
