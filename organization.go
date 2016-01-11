@@ -4,6 +4,7 @@ import (
 	"fmt"
 )
 
+// OrganizationSearchResponse struct
 type OrganizationSearchResponse struct {
 	Organizations Organization `'json:"results,omitempty"`
 	NextPage      *string      `json:"next_page,omitempty"`
@@ -11,10 +12,12 @@ type OrganizationSearchResponse struct {
 	Count         *int         `json:"count,omitempty"`
 }
 
+// OrganizationWrapper struct
 type OrganizationWrapper struct {
 	Organization *Organization `   json:"organization"`
 }
 
+// OrganizationResponse struct
 type OrganizationResponse struct {
 	Organizations Organization `json:"organizations,omitempty"`
 	NextPage      *string      `json:"next_page,omitempty"`
@@ -22,6 +25,7 @@ type OrganizationResponse struct {
 	Count         *int         `json:"count,omitempty"`
 }
 
+// Organization struct
 type Organization struct {
 	URL                *string           `json:"url,omitempty"`
 	ID                 *int              `json:"id,omitempty"`
