@@ -34,6 +34,7 @@ type Client struct {
 	Articles      *ArticleService
 	Labels        *LabelService
 	Organizations *OrganizationService
+	Search        *SearchService
 }
 
 // NewClient creates a new instance of the Client type
@@ -52,6 +53,7 @@ func NewClient(dmn, usrname, passwd string, httpClient *http.Client) *Client {
 	c.Tickets = &TicketService{client: c}
 	c.Users = &UserService{client: c}
 	c.Articles = &ArticleService{client: c}
+	c.Search = &SearchService{client: c}
 
 	return c
 }

@@ -4,17 +4,9 @@ import (
 	"fmt"
 )
 
-// OrganizationSearchResponse struct
-type OrganizationSearchResponse struct {
-	Organizations []Organization `json:"results,omitempty"`
-	NextPage      *string        `json:"next_page,omitempty"`
-	PreviousPage  *string        `json:"previous_page,omitempty"`
-	Count         *int           `json:"count,omitempty"`
-}
-
 // OrganizationWrapper struct
 type OrganizationWrapper struct {
-	Organization *Organization `   json:"organization"`
+	Organization *Organization `json:"organization"`
 }
 
 // OrganizationResponse struct
@@ -71,7 +63,7 @@ func (s *OrganizationService) GetOrganizationByID(organizationID string) (*Organ
 func (s *OrganizationService) UpdateOrganization(org *Organization) (*Organization, error) {
 	organization := &Organization{}
 
-	url := fmt.Sprintf("organizations/%v.json", org.ID)
+	url := fmt.Sprintf("organizations/%d.json", *org.ID)
 	or := &OrganizationWrapper{Organization: org}
 
 	req, err := s.client.NewRequest("PUT", url, or)
@@ -109,22 +101,4 @@ func (s *OrganizationService) CreateOrganization(org *Organization) (*Organizati
 
 	organization = result.Organization
 	return organization, nil
-}
-
-// SearchOrganizationByName searches the organization by name
-func (s *OrganizationService) SearchOrganizationByName(orgName string) (*OrganizationSearchResponse, error) {
-	org := &OrganizationSearchResponse{}
-	url := fmt.Sprintf("search?query=type:organization+name:%s", orgName)
-
-	req, err := s.client.NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	_, err = s.client.Do(req, &org)
-	if err != nil {
-		return nil, err
-	}
-
-	return org, nil
 }
