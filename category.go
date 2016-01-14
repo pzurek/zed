@@ -20,8 +20,3 @@ type Category struct {
 type CategoryService struct {
 	client *Client
 }
-
-// Get function
-// func (*CategoryService) Get() []Category {
-
-// }

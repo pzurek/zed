@@ -37,8 +37,8 @@ type OrganizationService struct {
 	client *Client
 }
 
-// GetOrganizationByID finds an organization in Zendesk by ID
-func (s *OrganizationService) GetOrganizationByID(organizationID string) (*Organization, *Response, error) {
+// Get finds an organization in Zendesk by ID
+func (s *OrganizationService) Get(organizationID string) (*Organization, *Response, error) {
 	org := OrganizationWrapper{}
 
 	url := fmt.Sprintf("organizations/%s.json", organizationID)
@@ -56,8 +56,8 @@ func (s *OrganizationService) GetOrganizationByID(organizationID string) (*Organ
 	return org.Organization, resp, err
 }
 
-// UpdateOrganization updates and organization by id
-func (s *OrganizationService) UpdateOrganization(org *Organization) (*Organization, error) {
+// Update updates and organization by id
+func (s *OrganizationService) Update(org *Organization) (*Organization, error) {
 	organization := &Organization{}
 
 	url := fmt.Sprintf("organizations/%v.json", org.ID)
@@ -78,8 +78,8 @@ func (s *OrganizationService) UpdateOrganization(org *Organization) (*Organizati
 	return organization, err
 }
 
-//CreateOrganization creates a new organization
-func (s *OrganizationService) CreateOrganization(org *Organization) (*Organization, error) {
+//Create creates a new organization
+func (s *OrganizationService) Create(org *Organization) (*Organization, error) {
 	organization := &Organization{}
 
 	or := &OrganizationWrapper{Organization: org}

@@ -48,8 +48,8 @@ type ArticleService struct {
 	client *Client
 }
 
-// GetAll function
-func (s *ArticleService) GetAll() ([]Article, error) {
+// List function
+func (s *ArticleService) List() ([]Article, error) {
 	resource := []Article{}
 	rp, next, _, err := s.getPage("")
 	if err != nil {
