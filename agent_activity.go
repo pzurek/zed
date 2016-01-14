@@ -21,7 +21,7 @@ type ActivityService struct {
 	client *Client
 }
 
-func (s *ActivityService) GetActivity() ([]AgentsActivity, error) {
+func (s *ActivityService) List() ([]AgentsActivity, error) {
 	resource := []AgentsActivity{}
 
 	rp, next, _, err := s.getPage("")

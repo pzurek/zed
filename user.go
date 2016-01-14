@@ -74,7 +74,7 @@ type Thumbnail struct {
 	Inline           *bool   `json:"inline,omitempty"`
 }
 
-func (s *UserService) Get() ([]User, error) {
+func (s *UserService) List() ([]User, error) {
 	resource := []User{}
 
 	rp, next, _, err := s.getPage("")

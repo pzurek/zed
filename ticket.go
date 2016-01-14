@@ -257,8 +257,8 @@ func (s *TicketService) getPageUG(url string) ([]Ticket, []User, []Group, *strin
 	return tickets, users, groups, next, resp, err
 }
 
-// GetOne method
-func (s *TicketService) GetOne(id string) (*Ticket, *Response, error) {
+// Get method
+func (s *TicketService) Get(id string) (*Ticket, *Response, error) {
 	url := fmt.Sprintf("tickets/%s.json", id)
 
 	req, err := s.client.NewRequest("GET", url, nil)

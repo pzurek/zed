@@ -59,8 +59,8 @@ func (s *LabelService) Create(id *int64, l *ArticleLabel) (*ArticleLabel, error)
 	return label, err
 }
 
-// GetAll function lists labels used in all articles
-func (s *LabelService) GetAll() ([]ArticleLabel, error) {
+// List function lists labels used in all articles
+func (s *LabelService) List() ([]ArticleLabel, error) {
 	resource := []ArticleLabel{}
 
 	rp, next, _, err := s.getPage("")
@@ -81,8 +81,8 @@ func (s *LabelService) GetAll() ([]ArticleLabel, error) {
 	return resource, err
 }
 
-// GetByArticleID function lists lablels used in an article with a given id
-func (s *LabelService) GetByArticleID(id *int64) ([]ArticleLabel, error) {
+// Get function lists lablels used in an article with a given id
+func (s *LabelService) Get(id *int64) ([]ArticleLabel, error) {
 	resource := []ArticleLabel{}
 
 	url := fmt.Sprintf("help_center/articles/%v/labels.json", *id)
