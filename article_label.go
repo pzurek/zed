@@ -11,13 +11,13 @@ type ArticleLabel struct {
 	UpdatedAt *string  `json:"updated_at,omitempty"`
 }
 
-// LabelWrapper struct
-type LabelWrapper struct {
+// LabelResponse struct
+type LabelResponse struct {
 	Label *ArticleLabel `json:"label,omitempty"`
 }
 
-// LabelListResponse struct
-type LabelListResponse struct {
+// LabelCollectionResponse struct
+type LabelCollectionResponse struct {
 	Results   []ArticleLabel `json:"labels,omitempty"`
 	Count     *int64         `json:"count,omitempty"`
 	Next      *string        `json:"next_page,omitempty"`
@@ -40,7 +40,7 @@ func (s *LabelService) Create(id *int64, l *ArticleLabel) (*ArticleLabel, error)
 		return label, fmt.Errorf("missing required field: label name")
 	}
 
-	lw := &LabelWrapper{Label: l}
+	lw := &LabelResponse{Label: l}
 
 	url := fmt.Sprintf("help_center/articles/%v/labels.json", *id)
 
@@ -49,7 +49,7 @@ func (s *LabelService) Create(id *int64, l *ArticleLabel) (*ArticleLabel, error)
 		return label, err
 	}
 
-	result := LabelWrapper{}
+	result := LabelResponse{}
 	_, err = s.client.Do(req, result)
 	if err != nil {
 		return label, err
@@ -115,7 +115,7 @@ func (s *LabelService) getPage(url string) ([]ArticleLabel, *string, *Response, 
 		return nil, nil, nil, err
 	}
 
-	result := LabelListResponse{}
+	result := LabelCollectionResponse{}
 	resp, err := s.client.Do(req, result)
 	if err != nil {
 		return nil, nil, resp, err

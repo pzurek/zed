@@ -27,13 +27,13 @@ type Article struct {
 	UpdatedAt        *string  `json:"updated_at,omitempty"`
 }
 
-// ArticleWrapper struct
-type ArticleWrapper struct {
+// ArticleResponse struct
+type ArticleResponse struct {
 	Article *Article `json:"article"`
 }
 
-// ArticleListResponse struct
-type ArticleListResponse struct {
+// ArticleCollectionResponse struct
+type ArticleCollectionResponse struct {
 	Results   []Article `json:"articles,omitempty"`
 	Count     *int64    `json:"count,omitempty"`
 	Next      *string   `json:"next_page,omitempty"`
@@ -80,7 +80,7 @@ func (s *ArticleService) getPage(url string) (*[]Article, *string, *Response, er
 		return nil, nil, nil, err
 	}
 
-	result := ArticleListResponse{}
+	result := ArticleCollectionResponse{}
 	resp, err := s.client.Do(req, result)
 	if err != nil {
 		return nil, nil, resp, err
@@ -113,7 +113,7 @@ func (s *ArticleService) Create(a *Article) (*Article, error) {
 		a.Locale = &l
 	}
 
-	ar := &ArticleWrapper{Article: a}
+	ar := &ArticleResponse{Article: a}
 
 	url := fmt.Sprintf("help_center/sections/%v/articles.json", int(*a.SectionID))
 
@@ -122,7 +122,7 @@ func (s *ArticleService) Create(a *Article) (*Article, error) {
 		return article, err
 	}
 
-	result := ArticleWrapper{}
+	result := ArticleResponse{}
 	_, err = s.client.Do(req, result)
 	if err != nil {
 		return article, err
@@ -154,7 +154,7 @@ func (s *ArticleService) Update(a *Article) (*Article, error) {
 		a.Locale = &l
 	}
 
-	ar := &ArticleWrapper{Article: a}
+	ar := &ArticleResponse{Article: a}
 
 	url := fmt.Sprintf("help_center/articles/%v.json", int(*a.ID))
 
@@ -163,7 +163,7 @@ func (s *ArticleService) Update(a *Article) (*Article, error) {
 		return article, err
 	}
 
-	result := ArticleWrapper{}
+	result := ArticleResponse{}
 	_, err = s.client.Do(req, result)
 	if err != nil {
 		return article, err
