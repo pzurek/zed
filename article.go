@@ -163,7 +163,7 @@ func (s *ArticleService) Update(a *Article) (*Article, error) {
 		return article, err
 	}
 
-	result := ArticleResponse{}
+	result := &ArticleResponse{}
 	_, err = s.client.Do(req, result)
 	if err != nil {
 		return article, err

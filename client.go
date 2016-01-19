@@ -97,7 +97,7 @@ func (c *Client) Do(req *http.Request, v interface{}) (*Response, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-	log.Printf("Zendesk response: %s\n", resp.Status)
+	log.Printf("Zendesk response status: %s\n", resp.Status)
 	response := newResponse(resp)
 
 	err = CheckResponse(resp)
