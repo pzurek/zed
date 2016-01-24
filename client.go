@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strings"
 )
@@ -97,7 +96,6 @@ func (c *Client) Do(req *http.Request, v interface{}) (*Response, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-	log.Printf("Zendesk response status: %s\n", resp.Status)
 	response := newResponse(resp)
 
 	err = CheckResponse(resp)
