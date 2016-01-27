@@ -11,7 +11,7 @@ func organizationExamples() {
 	client := zd.NewClient("zendesk_domain", "email/token", "token", nil)
 
 	// get Organization
-	existingOrg, _, err := client.Organizations.GetOrganizationByID("org_id")
+	existingOrg, _, err := client.Organizations.Get("org_id")
 
 	if err != nil {
 		fmt.Println("Oh no!")
@@ -30,7 +30,7 @@ func organizationExamples() {
 	}
 
 	// update the organization, handle any errors etc..
-	updatedOrganization, _ := client.Organizations.UpdateOrganization(existingOrg)
+	updatedOrganization, _ := client.Organizations.Update(existingOrg)
 
 	fmt.Println(updatedOrganization.UpdatedAt)
 
@@ -40,7 +40,7 @@ func organizationExamples() {
 		Name: &orgName,
 	}
 
-	response, _ := client.Organizations.CreateOrganization(&newOrg)
+	response, _ := client.Organizations.Create(&newOrg)
 
 	// print the id of new org.
 	fmt.Println(response.ID)
