@@ -133,19 +133,17 @@ func (s *ArticleService) Create(a *Article) (*Article, error) {
 }
 
 // Update func updates a single article
-func (s *ArticleService) Update(a *Article) (*Article, error) {
-	article := &Article{}
-
+func (s *ArticleService) Update(a *Article) error {
 	if a.ID == nil {
-		return article, fmt.Errorf("missing required field: article id")
+		return fmt.Errorf("missing required field: article id")
 	}
 
 	if a.Title == nil {
-		return article, fmt.Errorf("missing required field: article title")
+		return fmt.Errorf("missing required field: article title")
 	}
 
 	if a.Body == nil {
-		return article, fmt.Errorf("missing required field: article body")
+		return fmt.Errorf("missing required field: article body")
 	}
 
 	l := "en-us"
@@ -154,23 +152,22 @@ func (s *ArticleService) Update(a *Article) (*Article, error) {
 		a.Locale = &l
 	}
 
-	ar := &ArticleResponse{Article: a}
+	t := articleToTranslation(*a)
+	tr := &TranslationResponse{Translation: t}
 
 	url := fmt.Sprintf("help_center/articles/%v/translations/%v.json", int(*a.ID), *a.Locale)
 
-	req, err := s.client.NewRequest("PUT", url, ar)
+	req, err := s.client.NewRequest("PUT", url, tr)
 	if err != nil {
-		return article, err
+		return err
 	}
 
-	result := &ArticleResponse{}
-	_, err = s.client.Do(req, result)
+	_, err = s.client.Do(req, nil)
 	if err != nil {
-		return article, err
+		return err
 	}
 
-	article = result.Article
-	return article, err
+	return err
 }
 
 // Delete func deletes a single article
@@ -192,4 +189,13 @@ func (s *ArticleService) Delete(id *int64) error {
 	}
 
 	return err
+}
+
+func articleToTranslation(a Article) *Translation {
+	return &Translation{
+		Title:    a.Title,
+		Body:     a.Body,
+		Draft:    a.Draft,
+		Outdated: a.Outdated,
+	}
 }

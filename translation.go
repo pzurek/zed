@@ -1,17 +1,27 @@
 package zd
 
+import "time"
+
 // Translation struct
 type Translation struct {
-	ID         *float64 `json:"id,omitempty"`
-	URL        *string  `json:"url,omitempty"`
-	SourceID   *float64 `json:"source_id,omitempty"`
-	SourceType *string  `json:"source_type,omitempty"` // Article, Section, Category
-	Locale     *string  `json:"locale,omitempty"`
-	Title      *string  `json:"title,omitempty"`
-	Body       *string  `json:"body,omitempty"`
-	Outdated   *bool    `json:"outdated,omitempty"`
-	Draft      *bool    `json:"draft,omitempty"`
-	Hidden     *bool    `json:"hidden,omitempty"`
-	CreatedAt  *string  `json:"created_at,omitempty"`
-	UpdatedAt  *string  `json:"updated_at,omitempty"`
+	ID          *int       `json:"id"`
+	URL         *string    `json:"url"`
+	HTMLURL     *string    `json:"html_url"`
+	SourceID    *int       `json:"source_id"`
+	SourceType  *string    `json:"source_type"`
+	Locale      *string    `json:"locale"`
+	Title       *string    `json:"title"`
+	Body        *string    `json:"body"`
+	Outdated    *bool      `json:"outdated"`
+	Draft       *bool      `json:"draft"`
+	Hidden      *bool      `json:"hidden"`
+	CreatedAt   *time.Time `json:"created_at,omitempty"`
+	UpdatedAt   *time.Time `json:"updated_at,omitempty"`
+	UpdatedByID *int       `json:"updated_by_id"`
+	CreatedByID *int       `json:"created_by_id"`
+}
+
+// TranslationResponse struct
+type TranslationResponse struct {
+	Translation *Translation `json:"translation"`
 }
