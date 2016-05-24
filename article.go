@@ -156,7 +156,7 @@ func (s *ArticleService) Update(a *Article) (*Article, error) {
 
 	ar := &ArticleResponse{Article: a}
 
-	url := fmt.Sprintf("help_center/articles/%v.json", int(*a.ID))
+	url := fmt.Sprintf("help_center/articles/%v/translations/%v.json", int(*a.ID), *a.Locale)
 
 	req, err := s.client.NewRequest("PUT", url, ar)
 	if err != nil {
