@@ -8,7 +8,7 @@ import (
 
 func organizationExamples() {
 
-	client := zd.NewClient("zendesk_domain", "email/token", "token", nil)
+	client := zed.NewClient("zendesk_domain", "email/token", "token", nil)
 
 	// get Organization
 	existingOrg, _, err := client.Organizations.Get("org_id")
@@ -36,7 +36,7 @@ func organizationExamples() {
 
 	// create a new org
 	orgName := "brand new org"
-	newOrg := zd.Organization{
+	newOrg := zed.Organization{
 		Name: &orgName,
 	}
 
