@@ -1,4 +1,4 @@
-package zd
+package zed
 
 type AgentsActivity struct {
 	AgentID         *float64 `json:"agent_id,omitempty"`

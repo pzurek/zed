@@ -1,4 +1,4 @@
-package zd
+package zed
 
 // Section struct
 type Section struct {

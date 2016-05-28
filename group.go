@@ -1,4 +1,4 @@
-package zd
+package zed
 
 // Group struct
 type Group struct {
