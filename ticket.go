@@ -2,6 +2,7 @@ package zed
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 )
 
@@ -12,7 +13,6 @@ type Ticket struct {
 	ExternalID          *string             `json:"external_id,omitempty"`
 	Type                *string             `json:"type,omitempty"`
 	Subject             *string             `json:"subject,omitempty"`
-	Comment             *string             `json:"comment,omitempty"`
 	Description         *string             `json:"description,omitempty"`
 	Priority            *string             `json:"priority,omitempty"`
 	Status              *string             `json:"status,omitempty"`
@@ -38,12 +38,20 @@ type Ticket struct {
 	BrandID             *float64            `json:"brand_id,omitempty"`
 	CreatedAt           *string             `json:"created_at,omitempty"`
 	UpdatedAt           *string             `json:"updated_at,omitempty"`
+	Comment             *Comment            `json:"comment,omitempty"`
 }
 
 // Via struct
 type Via struct {
 	Channel *string      `json:"channel,omitempty"`
 	Source  *interface{} `json:"source,omitempty"`
+}
+
+// Comment on ticket
+type Comment struct {
+	Body     *string `json:"body,omitempty"`
+	Public   *bool   `json:"private,omitempty"`
+	AuthorID *int    `json:"author_id,omitemtpy"`
 }
 
 // CustomField struct
@@ -286,6 +294,35 @@ func (s *TicketService) Create(ticket *Ticket) (*Ticket, *Response, error) {
 	}
 
 	req, err := s.client.NewRequest("POST", url, body)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	response := TicketResponse{}
+	resp, err := s.client.Do(req, response)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return ticket, resp, err
+}
+
+// Update a Zendesk Ticket
+func (s *TicketService) Update(ticket *Ticket) (*Ticket, *Response, error) {
+	if ticket.ID == nil {
+		// no ticket id so return and error.
+		return nil, nil, errors.New("Please supply a ticket with an ID to update")
+	}
+
+	url := fmt.Sprintf("tickets/%d.json", ticket.ID)
+
+	body, err := json.Marshal(&ticket)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	req, err := s.client.NewRequest("PUT", url, body)
 	if err != nil {
 		return nil, nil, err
 	}
