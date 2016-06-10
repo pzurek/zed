@@ -310,7 +310,7 @@ func (s *TicketService) Create(ticket *Ticket) (*Ticket, *Response, error) {
 // Update a Zendesk Ticket
 func (s *TicketService) Update(ticket *Ticket) (*Ticket, *Response, error) {
 	if ticket.ID == nil {
-		// no ticket id so
+		// no ticket id so return and error.
 		return nil, nil, errors.New("Please supply a ticket with an ID to update")
 	}
 
