@@ -274,13 +274,13 @@ func (s *TicketService) Get(id string) (*Ticket, *Response, error) {
 		return nil, nil, err
 	}
 
-	response := &TicketResponse{}
-	resp, err := s.client.Do(req, &response)
+	ticket := &Ticket{}
+	resp, err := s.client.Do(req, &ticket)
 	if err != nil {
 		return nil, resp, err
 	}
 
-	return &response.Ticket, resp, err
+	return ticket, resp, err
 }
 
 // Create a new Zendesk Ticket
@@ -308,27 +308,28 @@ func (s *TicketService) Create(ticket *Ticket) (*Ticket, *Response, error) {
 }
 
 // Update a Zendesk Ticket
-func (s *TicketService) Update(ticket *Ticket) error {
+func (s *TicketService) Update(ticket *Ticket) (*Ticket, *Response, error) {
 	if ticket.ID == nil {
 		// no ticket id so return and error.
-		return errors.New("Please supply a ticket with an ID to update")
+		return nil, nil, errors.New("Please supply a ticket with an ID to update")
 	}
 
-	url := fmt.Sprintf("tickets/%v.json", int(*ticket.ID))
-	payload := TicketResponse{}
-	payload.Ticket = *ticket
+	url := fmt.Sprintf("tickets/%v.json", ticket.ID)
+
+	payload := TicketResponse{
+		Ticket: *ticket,
+	}
 
 	req, err := s.client.NewRequest("PUT", url, payload)
 	if err != nil {
-		return err
+		return nil, nil, err
 	}
 
-	resp, err := s.client.Do(req, nil)
+	response := TicketResponse{}
+	resp, err := s.client.Do(req, response)
 	if err != nil {
-		return err
+		return nil, resp, err
 	}
 
-	fmt.Printf("Response Code: %d", resp.StatusCode)
-
-	return nil
+	return ticket, resp, err
 }
