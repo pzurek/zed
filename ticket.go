@@ -314,15 +314,13 @@ func (s *TicketService) Update(ticket *Ticket) (*Ticket, *Response, error) {
 		return nil, nil, errors.New("Please supply a ticket with an ID to update")
 	}
 
-	url := fmt.Sprintf("tickets/%d.json", ticket.ID)
+	url := fmt.Sprintf("tickets/%v.json", ticket.ID)
 
-	body, err := json.Marshal(&ticket)
-
-	if err != nil {
-		return nil, nil, err
+	payload := TicketResponse{
+		Ticket: *ticket,
 	}
 
-	req, err := s.client.NewRequest("PUT", url, body)
+	req, err := s.client.NewRequest("PUT", url, payload)
 	if err != nil {
 		return nil, nil, err
 	}
