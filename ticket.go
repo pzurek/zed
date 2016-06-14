@@ -274,13 +274,13 @@ func (s *TicketService) Get(id string) (*Ticket, *Response, error) {
 		return nil, nil, err
 	}
 
-	ticket := &Ticket{}
-	resp, err := s.client.Do(req, &ticket)
+	response := &TicketResponse{}
+	resp, err := s.client.Do(req, &response)
 	if err != nil {
 		return nil, resp, err
 	}
 
-	return ticket, resp, err
+	return &response.Ticket, resp, err
 }
 
 // Create a new Zendesk Ticket
