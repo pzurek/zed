@@ -308,30 +308,27 @@ func (s *TicketService) Create(ticket *Ticket) (*Ticket, *Response, error) {
 }
 
 // Update a Zendesk Ticket
-func (s *TicketService) Update(ticket *Ticket) (*Ticket, *Response, error) {
+func (s *TicketService) Update(ticket *Ticket) error {
 	if ticket.ID == nil {
 		// no ticket id so return and error.
-		return nil, nil, errors.New("Please supply a ticket with an ID to update")
+		return errors.New("Please supply a ticket with an ID to update")
 	}
 
-	url := fmt.Sprintf("tickets/%d.json", ticket.ID)
+	url := fmt.Sprintf("tickets/%v.json", int(*ticket.ID))
+	payload := TicketResponse{}
+	payload.Ticket = *ticket
 
-	body, err := json.Marshal(&ticket)
-
+	req, err := s.client.NewRequest("PUT", url, payload)
 	if err != nil {
-		return nil, nil, err
+		return err
 	}
 
-	req, err := s.client.NewRequest("PUT", url, body)
+	resp, err := s.client.Do(req, nil)
 	if err != nil {
-		return nil, nil, err
+		return err
 	}
 
-	response := TicketResponse{}
-	resp, err := s.client.Do(req, response)
-	if err != nil {
-		return nil, resp, err
-	}
+	fmt.Printf("Response Code: %d", resp.StatusCode)
 
-	return ticket, resp, err
+	return nil
 }
