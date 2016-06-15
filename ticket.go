@@ -56,8 +56,8 @@ type Comment struct {
 
 // CustomField struct
 type CustomField struct {
-	ID    *float64     `json:"id,omitempty"`
-	Value *interface{} `json:"value,omitempty"`
+	ID    *float64    `json:"id,omitempty"`
+	Value interface{} `json:"value,omitempty"`
 }
 
 // SatisfactionRating struct
@@ -314,7 +314,7 @@ func (s *TicketService) Update(ticket *Ticket) (*Ticket, *Response, error) {
 		return nil, nil, errors.New("Please supply a ticket with an ID to update")
 	}
 
-	url := fmt.Sprintf("tickets/%v.json", ticket.ID)
+	url := fmt.Sprintf("tickets/%v.json", *ticket.ID)
 
 	payload := TicketResponse{
 		Ticket: *ticket,
@@ -326,7 +326,7 @@ func (s *TicketService) Update(ticket *Ticket) (*Ticket, *Response, error) {
 	}
 
 	response := TicketResponse{}
-	resp, err := s.client.Do(req, response)
+	resp, err := s.client.Do(req, &response)
 	if err != nil {
 		return nil, resp, err
 	}
