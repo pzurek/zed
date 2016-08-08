@@ -30,7 +30,7 @@ type Organization struct {
 	DomainNames        []string          `json:"domain_names,omitempty"`
 	Details            *string           `json:"details,omitempty"`
 	Notes              *string           `json:"notes,omitempty"`
-	GroupID            *string           `json:"group_id,omitempty"`
+	GroupID            *int              `json:"group_id,omitempty"`
 	Tags               []string          `json:"tags,omitempty"`
 	OrganizationFields map[string]string `json:"organization_fields,omitempty"`
 }
