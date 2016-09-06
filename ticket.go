@@ -13,7 +13,6 @@ type Ticket struct {
 	ExternalID          *string             `json:"external_id,omitempty"`
 	Type                *string             `json:"type,omitempty"`
 	Subject             *string             `json:"subject,omitempty"`
-	Comment             *string             `json:"comment,omitempty"`
 	Description         *string             `json:"description,omitempty"`
 	Priority            *string             `json:"priority,omitempty"`
 	Status              *string             `json:"status,omitempty"`
@@ -39,12 +38,20 @@ type Ticket struct {
 	BrandID             *float64            `json:"brand_id,omitempty"`
 	CreatedAt           *string             `json:"created_at,omitempty"`
 	UpdatedAt           *string             `json:"updated_at,omitempty"`
+	Comment             *Comment            `json:"comment,omitempty"`
 }
 
 // Via struct
 type Via struct {
 	Channel *string      `json:"channel,omitempty"`
 	Source  *interface{} `json:"source,omitempty"`
+}
+
+// Comment on ticket
+type Comment struct {
+	Body     *string `json:"body,omitempty"`
+	Public   *bool   `json:"public,omitempty"`
+	AuthorID *int    `json:"author_id,omitemtpy"`
 }
 
 // CustomField struct
@@ -58,13 +65,6 @@ type SatisfactionRating struct {
 	ID      *float64 `json:"id,omitempty"`
 	Score   *string  `json:"score,omitempty"`
 	Comment *string  `json:"comment,omitempty"`
-}
-
-// Comment struct
-type Comment struct {
-	Body     *string `json:"body,omitempty"`
-	Public   *bool   `json:"public,omitempty"`
-	AuthorID *int    `json:"author_id,omitemtpy"`
 }
 
 // TicketCollectionResponse struct
@@ -274,13 +274,13 @@ func (s *TicketService) Get(id string) (*Ticket, *Response, error) {
 		return nil, nil, err
 	}
 
-	ticket := &Ticket{}
-	resp, err := s.client.Do(req, &ticket)
+	response := &TicketResponse{}
+	resp, err := s.client.Do(req, &response)
 	if err != nil {
 		return nil, resp, err
 	}
 
-	return ticket, resp, err
+	return &response.Ticket, resp, err
 }
 
 // Create a new Zendesk Ticket
