@@ -2,6 +2,7 @@ package zed
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 )
 
@@ -48,8 +49,8 @@ type Via struct {
 
 // CustomField struct
 type CustomField struct {
-	ID    *float64     `json:"id,omitempty"`
-	Value *interface{} `json:"value,omitempty"`
+	ID    *float64    `json:"id,omitempty"`
+	Value interface{} `json:"value,omitempty"`
 }
 
 // SatisfactionRating struct
@@ -57,6 +58,13 @@ type SatisfactionRating struct {
 	ID      *float64 `json:"id,omitempty"`
 	Score   *string  `json:"score,omitempty"`
 	Comment *string  `json:"comment,omitempty"`
+}
+
+// Comment struct
+type Comment struct {
+	Body     *string `json:"body,omitempty"`
+	Public   *bool   `json:"public,omitempty"`
+	AuthorID *int    `json:"author_id,omitemtpy"`
 }
 
 // TicketCollectionResponse struct
@@ -292,6 +300,33 @@ func (s *TicketService) Create(ticket *Ticket) (*Ticket, *Response, error) {
 
 	response := TicketResponse{}
 	resp, err := s.client.Do(req, response)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return ticket, resp, err
+}
+
+// Update a Zendesk Ticket
+func (s *TicketService) Update(ticket *Ticket) (*Ticket, *Response, error) {
+	if ticket.ID == nil {
+		// no ticket id so return and error.
+		return nil, nil, errors.New("Please supply a ticket with an ID to update")
+	}
+
+	url := fmt.Sprintf("tickets/%v.json", *ticket.ID)
+
+	payload := TicketResponse{
+		Ticket: *ticket,
+	}
+
+	req, err := s.client.NewRequest("PUT", url, payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	response := TicketResponse{}
+	resp, err := s.client.Do(req, &response)
 	if err != nil {
 		return nil, resp, err
 	}
