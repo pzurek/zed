@@ -19,7 +19,7 @@ type SearchService struct {
 func (s *SearchService) OrganizationByName(name string) (*OrganizationSearchResponse, error) {
 	result := &OrganizationSearchResponse{}
 
-	url := fmt.Sprintf("search?query=type:organization+name:%s", name)
+	url := fmt.Sprintf("search.json?query=type:organization+name:%s", name)
 
 	req, err := s.client.NewRequest("GET", url, nil)
 	if err != nil {
