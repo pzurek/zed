@@ -51,14 +51,14 @@ type ArticleService struct {
 // List function
 func (s *ArticleService) List() ([]Article, error) {
 	resource := []Article{}
-	rp, next, _, err := s.getPage("")
+	rp, next, _, err := s.getPage("", "")
 	if err != nil {
 		return resource, err
 	}
 	resource = append(resource, *rp...)
 
 	for next != nil {
-		rp, nx, _, err := s.getPage(*next)
+		rp, nx, _, err := s.getPage(*next, "")
 		if err != nil {
 			return resource, err
 		}
@@ -69,7 +69,7 @@ func (s *ArticleService) List() ([]Article, error) {
 	return resource, err
 }
 
-func (s *ArticleService) getPage(url string) (*[]Article, *string, *Response, error) {
+func (s *ArticleService) getPage(url, locale string) (*[]Article, *string, *Response, error) {
 
 	if url == "" {
 		url = "help_center/articles.json"
