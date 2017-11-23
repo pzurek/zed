@@ -230,7 +230,7 @@ func (s *TicketService) getPage(url string) ([]Ticket, *string, *Response, error
 		return nil, nil, nil, err
 	}
 
-	response := TicketCollectionResponse{}
+	response := &TicketCollectionResponse{}
 	resp, err := s.client.Do(req, response)
 	if err != nil {
 		return nil, nil, resp, err
