@@ -5,5 +5,5 @@ os:
   - osx
 
 go:
-  - latest
+  - 1.x
   - tip
